@@ -1,8 +1,8 @@
-using CatalogoZap.DTO;
+using CatalogoZap.DTOs;
 
 namespace CatalogoZap.Services.Interfaces;
 
 public interface IProductsService
 {
-    Task CreateProduct(PostProductsDTO dto, Guid UserId);
+    Task CreateProduct(ProductDTO dto, Guid UserId);
 }

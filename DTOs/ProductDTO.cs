@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using CatalogoZap.Attributes;
 
-namespace CatalogoZap.DTO;
+namespace CatalogoZap.DTOs;
 
-public class PostProductsDTO
+public class ProductDTO
 {
     [Required] public Guid StoreId { get; set; }
     [Required] public required string Name { get; set; }

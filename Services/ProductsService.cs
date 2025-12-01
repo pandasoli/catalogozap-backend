@@ -1,5 +1,5 @@
 using CatalogoZap.Services.Interfaces;
-using CatalogoZap.DTO;
+using CatalogoZap.DTOs;
 using CatalogoZap.Infrastructure.CloudinaryService;
 using CatalogoZap.Repositories.Interfaces;
 using CatalogoZap.Models;
@@ -16,7 +16,7 @@ public class ProductsService : IProductsService
         _productsRepository = productsRepository;
     }
 
-    public async Task CreateProduct(PostProductsDTO dto, Guid UserId) {
+    public async Task CreateProduct(ProductDTO dto, Guid UserId) {
         string photoUrl = await _cloudinaryService.UploadImageAsync(dto.Photo);
 
         var data = new ProductModel {

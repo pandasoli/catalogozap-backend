@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CatalogoZap.Infrastructure.JWT;
-using CatalogoZap.DTO;
+using CatalogoZap.DTOs;
 using CatalogoZap.Services.Interfaces;
 
 namespace CatalogoZap.Controllers;
@@ -19,7 +19,7 @@ public class ProductsController : ControllerBase
 
 	[HttpPost]
 	[Authorize]
-	public async Task<IActionResult> PostProduct([FromForm] PostProductsDTO dto)
+	public async Task<IActionResult> PostProduct([FromForm] ProductDTO dto)
 	{
         var userId = TokenService.GetUserId(User);
 
