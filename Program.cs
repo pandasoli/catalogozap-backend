@@ -2,17 +2,25 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using CatalogoZap.Infrastructure.JWT;
 using CatalogoZap.Infrastructure.Swagger;
-using CatalogoZap.Infrastructure.Database;
 using CatalogoZap.Services.Interfaces;
 using CatalogoZap.Services;
-using CatalogoZap.Rules;
-using CatalogoZap.Infrastructure.CloudinaryService;
 using CatalogoZap.Repositories;
 using CatalogoZap.Repositories.Interfaces;
 using System.Data;
 using Npgsql;
+using DotNetEnv;
+using CatalogoZap.Infrastructure.Cloudinary;
 
 var builder = WebApplication.CreateBuilder(args);
+
+if (builder.Environment.IsDevelopment()) {
+    Env.Load();
+
+    var connectionString = builder.Configuration.GetConnectionString("Default");
+    var password = Env.GetString("DB_PASSWORD");
+
+    builder.Configuration.GetSection("ConnectionStrings")["Default"] = connectionString + password;
+}
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -42,8 +50,6 @@ builder.Services.AddSwaggerGen(c => {
 });
 
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IBussinesRules, BusinessRules>();
-builder.Services.AddScoped<IConvertToConnectionString, ConvertToConnectionString>();
 builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 builder.Services.AddScoped<IProductsService, ProductsService>();
 builder.Services.AddScoped<IProductsRepository, ProductsRepository>();

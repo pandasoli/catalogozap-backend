@@ -1,6 +1,6 @@
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
-using dotenv.net;
+using DotNetEnv;
 
 namespace CatalogoZap.Infrastructure.CloudinaryService;
 
@@ -9,13 +9,14 @@ public interface ICloudinaryService
     Task<string> UploadImageAsync(IFormFile image);
     Task<DeletionResult> DeleteImageAsync(string path);
 }
+
 public class CloudinaryService : ICloudinaryService
 {
     private readonly Cloudinary _cloudinary;
 
     public CloudinaryService()
     {
-        DotEnv.Load();
+        Env.Load();
         var cloudinaryUrl = Environment.GetEnvironmentVariable("CLOUDINARY_URL");
 
         if (string.IsNullOrEmpty(cloudinaryUrl))
