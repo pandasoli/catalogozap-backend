@@ -1,9 +1,9 @@
 using CatalogoZap.DTO;
+using CatalogoZap.Models;
 
-namespace CatalogoZap.Repositories.Interfaces
+namespace CatalogoZap.Repositories.Interfaces;
+
+public interface IProductsRepository
 {
-    public interface IProductsRepository
-    {
-        Task PostProducts(PostProductsDTO dto, Guid UserId, string ConnectionString, string imgUrl);
-    }
+    Task CreateProduct(ProductModel data, Guid userId);
 }

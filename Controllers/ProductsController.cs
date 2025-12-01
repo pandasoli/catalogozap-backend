@@ -38,7 +38,7 @@ public class ProductsController : ControllerBase
 
 		if (!_businessRules.MaxFreePlan(_connectionString, UserId)) return BadRequest("Maximum number of products registered on the free plan");
 
-		await _productsService.PostProducts(dto, UserId, _connectionString);
+		await _productsService.CreateProduct(dto, UserId);
 
 		return Ok();
 	}

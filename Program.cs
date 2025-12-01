@@ -1,16 +1,16 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
-using dotenv.net;
 using CatalogoZap.Infrastructure.JWT;
 using CatalogoZap.Infrastructure.Swagger;
 using CatalogoZap.Infrastructure.Database;
 using CatalogoZap.Services.Interfaces;
 using CatalogoZap.Services;
 using CatalogoZap.Rules;
-using CatalogoZap.DTO.Database;
 using CatalogoZap.Infrastructure.CloudinaryService;
 using CatalogoZap.Repositories;
 using CatalogoZap.Repositories.Interfaces;
+using System.Data;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,14 +48,9 @@ builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 builder.Services.AddScoped<IProductsService, ProductsService>();
 builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
 
-DotEnv.Load();
-var DATABASE_URL = Environment.GetEnvironmentVariable("DATABASE_URL");
-if(string.IsNullOrWhiteSpace(DATABASE_URL)) throw new Exception("DATABASE_URL is null");
-
-ConvertToConnectionString convertToConnectionString = new();
-DatabaseSettingsDTO databaseSettingsDTO = new();
-databaseSettingsDTO.ConnectionString = convertToConnectionString.convert(DATABASE_URL);
-builder.Services.AddSingleton(databaseSettingsDTO);
+builder.Services.AddScoped<IDbConnection>(sp =>
+	new NpgsqlConnection(builder.Configuration.GetConnectionString("Default"))
+);
 
 var app = builder.Build();
 
