@@ -7,11 +7,7 @@ namespace CatalogoZap.Infrastructure.JWT;
 
 public interface ITokenService
 {
-	string GenerateToken(string username);
-	string? GetJWTByHeader(HttpContext context);
-	string? decodeJWT(string token);
-	string? GetJWTAndDecode(HttpContext context);
-
+	string GenerateToken(Guid userId);
 }
 
 public class TokenService : ITokenService
@@ -40,13 +36,13 @@ public class TokenService : ITokenService
 		ClockSkew = TimeSpan.Zero
 	};
 
-	public string GenerateToken(string username)
+	public string GenerateToken(Guid userId)
 	{
 		var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
 		var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
 		var claims = new[] {
-			new Claim(JwtRegisteredClaimNames.Sub, username),
+			new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
 			new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
 		};
 
@@ -61,48 +57,8 @@ public class TokenService : ITokenService
 		return new JwtSecurityTokenHandler().WriteToken(token);
 	}
 
-	public string? GetJWTByHeader(HttpContext context)
-	{
-		string? authHeader = context.Request.Headers["Authorization"];
-
-		if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
-		{
-			return null;
-		}
-
-		string jwtToken = authHeader.Substring("Bearer ".Length).Trim();
-
-		return jwtToken;
-	}
-
-	public string? decodeJWT(string token)
-	{
-		var handler = new JwtSecurityTokenHandler();
-
-		if (!handler.CanReadToken(token))
-		{
-			return null;
-		}
-
-		var jwtToken = handler.ReadJwtToken(token);
-
-		return jwtToken.Claims.FirstOrDefault(c => c.Type == "nameid")?.Value;
-	}
-
-	public string? GetJWTAndDecode(HttpContext context)
-	{
-		string? Jwt = GetJWTByHeader(context);
-		if (string.IsNullOrEmpty(Jwt))
-		{
-			return null;
-		}
-
-		string? decodedJwt = decodeJWT(Jwt);
-		if (string.IsNullOrEmpty(decodedJwt))
-		{
-			return null;
-		}
-
-		return decodedJwt;
-	}
+    public static Guid GetUserId(ClaimsPrincipal User)
+    {
+        return Guid.Parse(User.FindFirst(JwtRegisteredClaimNames.Sub)!.Value);
+    }
 }
