@@ -23,10 +23,8 @@ public class ProductsController : ControllerBase
 	{
         var userId = TokenService.GetUserId(User);
 
-        // if (!_bussinesRules.MaxFreePlan("", userId))
-        //     return BadRequest("Maximum number of products registered on the free plan");
-
-		await _productsService.CreateProduct(dto, userId);
+        try { await _productsService.CreateProduct(dto, userId); }
+        catch (Exception err) { return BadRequest(err); }
 
 		return Ok();
 	}

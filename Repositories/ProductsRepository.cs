@@ -13,6 +13,17 @@ public class ProductsRepository : IProductsRepository
         _conn = connection;
     }
 
+    public async Task<int> GetProductsAmountByUserId(Guid userId) {
+        var query = @"
+            SELECT COUNT(*)
+            FROM products p
+            INNER JOIN profiles u ON p.user_id = u.id
+            WHERE user_id = @userId
+        ";
+
+        return await _conn.QuerySingleAsync<int>(query, new { userId });
+    }
+
     public async Task CreateProduct(ProductModel data, Guid userId) {
         var query = @"
             INSERT INTO products
