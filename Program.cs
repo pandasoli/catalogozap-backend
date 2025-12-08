@@ -8,18 +8,14 @@ using CatalogoZap.Repositories;
 using CatalogoZap.Repositories.Interfaces;
 using System.Data;
 using Npgsql;
-using DotNetEnv;
-using CatalogoZap.Infrastructure.Cloudinary;
+using CatalogoZap.Infrastructure.CloudinaryService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 if (builder.Environment.IsDevelopment()) {
-    Env.Load();
-
     var connectionString = builder.Configuration.GetConnectionString("Default");
-    var password = Env.GetString("DB_PASSWORD");
 
-    builder.Configuration.GetSection("ConnectionStrings")["Default"] = connectionString + password;
+    builder.Configuration.GetSection("ConnectionStrings")["Default"] = connectionString;
 }
 
 builder.Services.AddControllers();
