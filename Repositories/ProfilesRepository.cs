@@ -18,6 +18,6 @@ public class ProfilesRepository : IProfilesRepository
             SELECT * FROM profiles WHERE id = @userId
         ";
 
-		return await _conn.QuerySingleAsync(query, new { userId });
+		return await _conn.QuerySingleAsync<ProfileModel>(query, new { userId });
     }
 }
