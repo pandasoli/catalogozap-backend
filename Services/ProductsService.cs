@@ -33,6 +33,7 @@ public class ProductsService : IProductsService
         string photoUrl = await _cloudinaryService.UploadImageAsync(dto.Photo);
 
         var data = new ProductModel {
+            UserId = userId,
             PhotoUrl = photoUrl,
             Name = dto.Name,
             PriceCents = dto.PriceCents,
@@ -40,6 +41,6 @@ public class ProductsService : IProductsService
             Avaliable = dto.Avaliable
         };
 
-        await _productsRepository.CreateProduct(data, userId);
+        await _productsRepository.CreateProduct(data);
     }
 }

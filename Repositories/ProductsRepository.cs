@@ -24,7 +24,7 @@ public class ProductsRepository : IProductsRepository
         return await _conn.QuerySingleAsync<int>(query, new { userId });
     }
 
-    public async Task CreateProduct(ProductModel data, Guid userId) {
+    public async Task CreateProduct(ProductModel data) {
         var query = @"
             INSERT INTO products
                 (user_id, name, price_cents, photo_url, store_id, avaliable)
@@ -33,7 +33,7 @@ public class ProductsRepository : IProductsRepository
         ";
 
 		await _conn.ExecuteScalarAsync(query, new {
-            UserId = userId,
+            data.UserId,
             data.Name,
             data.PriceCents,
             data.PhotoUrl,
