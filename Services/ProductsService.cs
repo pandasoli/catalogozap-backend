@@ -22,10 +22,6 @@ public class ProductsService : IProductsService
         _productsRepository = productsRepository;
     }
 
-    public async Task<int> GetProductsAmountByUserId(Guid userId) {
-        return await _productsRepository.GetProductsAmountByUserId(userId);
-    }
-
     public async Task CreateProduct(ProductDTO dto, Guid userId) {
         if (await _profilesService.HasReachedFreeTierLimit(userId))
             throw new Exception("Reached free plan products limit.");

@@ -49,6 +49,7 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 builder.Services.AddScoped<IProductsService, ProductsService>();
 builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
+builder.Services.AddScoped<IProfilesService, ProfilesService>();
 
 builder.Services.AddScoped<IDbConnection>(sp =>
 	new NpgsqlConnection(builder.Configuration.GetConnectionString("Default"))
