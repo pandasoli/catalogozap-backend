@@ -39,4 +39,16 @@ public class ProductsService : IProductsService
 
         await _productsRepository.CreateProduct(data);
     }
+
+    public async Task<List<ProductModel>> GetProducts(Guid storeId, Guid? UserId)
+    {
+        if(UserId == null)
+        {
+            return await _productsRepository.GetProducts(storeId);
+        }
+        else
+        {
+            return await _productsRepository.GetProductsAdmin(storeId, UserId);
+        }
+    }
 }

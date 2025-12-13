@@ -9,11 +9,13 @@ public class ProductsRepository : IProductsRepository
 {
     private readonly IDbConnection _conn;
 
-    public ProductsRepository(IDbConnection connection) {
+    public ProductsRepository(IDbConnection connection)
+    {
         _conn = connection;
     }
 
-    public async Task<int> GetProductsAmountByUserId(Guid userId) {
+    public async Task<int> GetProductsAmountByUserId(Guid userId)
+    {
         var query = @"
             SELECT COUNT(*)
             FROM products p
@@ -24,7 +26,8 @@ public class ProductsRepository : IProductsRepository
         return await _conn.QuerySingleAsync<int>(query, new { userId });
     }
 
-    public async Task CreateProduct(ProductModel data) {
+    public async Task CreateProduct(ProductModel data)
+    {
         var query = @"
             INSERT INTO products
                 (user_id, name, price_cents, photo_url, store_id, avaliable)
@@ -32,7 +35,8 @@ public class ProductsRepository : IProductsRepository
                 (@UserId, @Name, @PriceCents, @PhotoUrl, @StoreId, @Avaliable)
         ";
 
-		await _conn.ExecuteScalarAsync(query, new {
+        await _conn.ExecuteScalarAsync(query, new
+        {
             data.UserId,
             data.Name,
             data.PriceCents,
@@ -40,5 +44,43 @@ public class ProductsRepository : IProductsRepository
             data.StoreId,
             data.Avaliable
         });
+    }
+
+    public async Task<List<ProductModel>> GetProducts(Guid storeId)
+    {
+        var query = @"
+        SELECT 
+            id AS Id,
+            user_id AS UserId,
+            name AS Name,
+            price_cents AS PriceCents,
+            photo_url AS PhotoUrl,
+            store_id AS StoreId,
+            avaliable AS Avaliable
+        FROM products 
+        WHERE store_id = @store_id AND avaliable = TRUE";
+
+        var products = await _conn.QueryAsync<ProductModel>(query, new { storeId });
+
+        return products.ToList();
+    }
+
+    public async Task<List<ProductModel>> GetProductsAdmin(Guid storeId, Guid? UserId)
+    {
+        var query = @"+
+        SELECT 
+            id AS Id,
+            user_id AS UserId,
+            name AS Name,
+            price_cents AS PriceCents,
+            photo_url AS PhotoUrl,
+            store_id AS StoreId,
+            avaliable AS Avaliable
+        FROM products 
+        WHERE store_id = @store_id AND user_id = @user_id";
+
+        var products = await _conn.QueryAsync<ProductModel>(query, new { storeId, UserId });
+
+        return products.ToList();
     }
 }

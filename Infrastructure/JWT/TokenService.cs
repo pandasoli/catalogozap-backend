@@ -57,8 +57,10 @@ public class TokenService : ITokenService
 		return new JwtSecurityTokenHandler().WriteToken(token);
 	}
 
-    public static Guid GetUserId(ClaimsPrincipal User)
-    {
-        return Guid.Parse(User.FindFirst(JwtRegisteredClaimNames.Sub)!.Value);
-    }
+	public static Guid GetUserId(ClaimsPrincipal User)
+	{
+		var UserId = User.FindFirst(JwtRegisteredClaimNames.Sub)!.Value;
+
+		return Guid.Parse(UserId);
+	}
 }
