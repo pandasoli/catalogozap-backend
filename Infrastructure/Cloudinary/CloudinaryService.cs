@@ -1,6 +1,5 @@
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
-using DotNetEnv;
 
 namespace CatalogoZap.Infrastructure.CloudinaryService;
 
@@ -14,10 +13,9 @@ public class CloudinaryService : ICloudinaryService
 {
     private readonly Cloudinary _cloudinary;
 
-    public CloudinaryService()
+    public CloudinaryService(IConfiguration config)
     {
-        Env.Load();
-        var cloudinaryUrl = Environment.GetEnvironmentVariable("CLOUDINARY_URL");
+        var cloudinaryUrl = config["Cloudinary:ApiKey"];
 
         if (string.IsNullOrEmpty(cloudinaryUrl))
             throw new Exception("CLOUDINARY_URL not found");

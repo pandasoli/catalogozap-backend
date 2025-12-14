@@ -63,4 +63,18 @@ public class TokenService : ITokenService
 
 		return Guid.Parse(UserId);
 	}
+
+	//for cases when UserId can be null
+	public static Guid? TryGetUserId(ClaimsPrincipal user)
+	{
+		if (user?.Identity?.IsAuthenticated != true)
+			return null;
+
+		var claim = user.FindFirst(JwtRegisteredClaimNames.Sub);
+		if (claim == null)
+			return null;
+
+		return Guid.Parse(claim.Value);
+	}
+
 }

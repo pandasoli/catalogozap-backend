@@ -25,7 +25,7 @@ public class ProductsController : ControllerBase
         Guid userId = TokenService.GetUserId(User);
 
         try { await _productsService.CreateProduct(dto, userId); }
-        catch (Exception err) { return BadRequest(err); }
+        catch (Exception err) { Console.WriteLine(err); return BadRequest(err.Message); }
 
 		return Ok();
 	}
@@ -34,9 +34,9 @@ public class ProductsController : ControllerBase
 	public async Task<IActionResult> GetProduct(Guid storeId)
 	{
 		//It will be null if it is not admin acess
-		var UserId = TokenService.GetUserId(User);
+		var UserId = TokenService.TryGetUserId(User);
 
 		try { return Ok(await _productsService.GetProducts(storeId, UserId)); }
-		catch (Exception err) { return BadRequest(err); }
+		catch (Exception err) { Console.WriteLine(err); return BadRequest(err.Message); }
 	}
 }

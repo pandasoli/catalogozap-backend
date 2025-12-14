@@ -60,14 +60,17 @@ public class ProductsRepository : IProductsRepository
         FROM products 
         WHERE store_id = @store_id AND avaliable = TRUE";
 
-        var products = await _conn.QueryAsync<ProductModel>(query, new { storeId });
+        var products = await _conn.QueryAsync<ProductModel>(query, new
+        {
+            store_Id = storeId
+        });
 
         return products.ToList();
     }
 
     public async Task<List<ProductModel>> GetProductsAdmin(Guid storeId, Guid? UserId)
     {
-        var query = @"+
+        var query = @"
         SELECT 
             id AS Id,
             user_id AS UserId,
@@ -79,7 +82,11 @@ public class ProductsRepository : IProductsRepository
         FROM products 
         WHERE store_id = @store_id AND user_id = @user_id";
 
-        var products = await _conn.QueryAsync<ProductModel>(query, new { storeId, UserId });
+        var products = await _conn.QueryAsync<ProductModel>(query, new
+        {
+            store_Id = storeId,
+            user_id = UserId
+        });
 
         return products.ToList();
     }
