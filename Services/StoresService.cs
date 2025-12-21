@@ -13,7 +13,7 @@ public class StoresService : IStoresService
         _storesRepository = storesRepository;
     }
 
-    public async Task<List<StoreModel>> GetStore(Guid UserId)
+    public async Task<List<StoreModel>> GetStores(Guid UserId)
     {
         return await _storesRepository.SelectStores(UserId);
     }

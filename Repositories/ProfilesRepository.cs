@@ -14,13 +14,24 @@ public class ProfilesRepository : IProfilesRepository
         _conn = connection;
     }
 
-    public async Task<ProfileModel> GetProfileById(Guid userId)
+    public async Task<ProfileModel?> GetProfileById(Guid userId)
     {
         var query = @"
-            SELECT * FROM profiles WHERE id = @userId
+            SELECT 
+                username AS Username,
+                bio AS Bio,
+                phone AS Phone,
+                logo_url AS LogoUrl,
+                created_at AS CreatedAt,
+                email AS Email,
+                premium AS Premium
+            FROM profiles 
+            WHERE id = @userId
         ";
 
-        return await _conn.QuerySingleAsync<ProfileModel>(query, new { userId });
+        var profile = await _conn.QuerySingleOrDefaultAsync<ProfileModel>(query, new { userId });
+
+        return profile;
     }
 
     public async Task<LoginModel?> SelectUser(string Email)

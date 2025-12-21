@@ -22,7 +22,7 @@ public class StoresController : ControllerBase
 	{
 		var UserId = TokenService.GetUserId(User);
 
-		try { return Ok(await _storesService.GetStore(UserId)); }
+		try { return Ok(await _storesService.GetStores(UserId)); }
 		catch (Exception err) { return BadRequest(err.Message); }
 	}
 }

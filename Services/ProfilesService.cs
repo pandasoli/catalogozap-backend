@@ -50,4 +50,9 @@ public class ProfilesService : IProfilesService
 
         await _profilesRepository.InsertUser(register);
     }
+
+    public async Task<ProfileModel> GetProfiles(Guid UserId)
+    {
+        return await _profilesRepository.GetProfileById(UserId) ?? throw new Exception("Profile not found");
+    }
 }
