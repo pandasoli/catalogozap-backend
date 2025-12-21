@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CatalogoZap.Infrastructure.JWT;
-using CatalogoZap.DTOs;
 using CatalogoZap.Services.Interfaces;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace CatalogoZap.Controllers;
 

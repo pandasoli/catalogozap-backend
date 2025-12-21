@@ -38,4 +38,18 @@ public class ProfilesRepository : IProfilesRepository
             email = Email
         });
     }
+
+    public async Task InsertUser(RegisterModel register)
+    {
+        var query = @"
+            INSERT INTO profiles(username, email, password) VALUES(@username, @email, @password)
+        ";
+
+        await _conn.ExecuteAsync(query, new
+        {
+            username = register.Username,
+            email = register.Email,
+            password = register.HashPassword
+        });
+    }
 }

@@ -4,5 +4,5 @@ namespace CatalogoZap.Repositories.Interfaces;
 
 public interface IStoresRepository
 {
-    Task<StoreModel> SelectStores(Guid UserId);
+    Task<List<StoreModel>> SelectStores(Guid UserId);
 }

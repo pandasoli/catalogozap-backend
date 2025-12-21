@@ -2,6 +2,7 @@ using CatalogoZap.Services.Interfaces;
 using CatalogoZap.Repositories.Interfaces;
 using CatalogoZap.Infrastructure.JWT;
 using CatalogoZap.DTOs;
+using CatalogoZap.Models;
 
 namespace CatalogoZap.Services;
 
@@ -27,10 +28,26 @@ public class ProfilesService : IProfilesService
 
     public async Task<string> Login(LoginDTO dto)
     {
-        var DbData = await _profilesRepository.SelectUser(dto.Email) ?? throw new Exception("User doesnt exits");
+        var DbData = await _profilesRepository.SelectUser(dto.Email) ?? throw new Exception("User doesnt exist");
 
         if (!BCrypt.Net.BCrypt.Verify(dto.Password, DbData.Password)) throw new Exception("Incorrect Password");
 
         return _tokenService.GenerateToken(DbData.Id);
+    }
+
+    public async Task Register(RegisterDTO dto)
+    {
+        if(await _profilesRepository.SelectUser(dto.Email) != null) throw new Exception("User already exist");
+
+        string HashPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password, workFactor: 12);
+
+        var register = new RegisterModel()
+        {
+            Username = dto.Username,
+            Email = dto.Email,
+            HashPassword = HashPassword
+        };
+
+        await _profilesRepository.InsertUser(register);
     }
 }

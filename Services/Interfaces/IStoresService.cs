@@ -4,5 +4,5 @@ namespace CatalogoZap.Services.Interfaces;
 
 public interface IStoresService
 {
-    Task<StoreModel> GetStore(Guid UserId);
+    Task<List<StoreModel>> GetStore(Guid UserId);
 }

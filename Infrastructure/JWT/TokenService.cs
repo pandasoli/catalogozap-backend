@@ -59,9 +59,12 @@ public class TokenService : ITokenService
 
 	public static Guid GetUserId(ClaimsPrincipal User)
 	{
-		var UserId = User.FindFirst(JwtRegisteredClaimNames.Sub)!.Value;
+		var UserId = User.FindFirst(ClaimTypes.NameIdentifier);
 
-		return Guid.Parse(UserId);
+		if (UserId == null)
+			throw new UnauthorizedAccessException("UserId not found in the token.");
+
+		return Guid.Parse(UserId.Value);
 	}
 
 	//for cases when UserId can be null
@@ -70,7 +73,7 @@ public class TokenService : ITokenService
 		if (user?.Identity?.IsAuthenticated != true)
 			return null;
 
-		var claim = user.FindFirst(JwtRegisteredClaimNames.Sub);
+		var claim = user.FindFirst(ClaimTypes.NameIdentifier);
 		if (claim == null)
 			return null;
 

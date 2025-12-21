@@ -12,7 +12,7 @@ public class StoresRepository : IStoresRepository
     {
         _conn = conn;
     }
-    public async Task<StoreModel> SelectStores(Guid UserId)
+    public async Task<List<StoreModel>> SelectStores(Guid UserId)
     {
         var query = @"
             SELECT 
@@ -24,6 +24,11 @@ public class StoresRepository : IStoresRepository
             WHERE user_id = @user_id
         ";
 
-        return await _conn.QuerySingleAsync<StoreModel>(query, new { UserId });
+        var stores = await _conn.QueryAsync<StoreModel>(query, new
+        {
+            user_id = UserId
+        });
+
+        return stores.ToList();
     }
 }
