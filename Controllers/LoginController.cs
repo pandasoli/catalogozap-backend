@@ -22,6 +22,6 @@ public class LoginController : ControllerBase
     public async Task<IActionResult> Login(LoginDTO dto)
     {
         try { return Ok(await _profilesService.Login(dto)); }
-        catch (Exception err) { Console.WriteLine(err); return Unauthorized(err.Message); }
+        catch (Exception err) { return Unauthorized(err.Message); }
     }
 }

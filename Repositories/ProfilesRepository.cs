@@ -2,7 +2,6 @@ using CatalogoZap.Repositories.Interfaces;
 using System.Data;
 using Dapper;
 using CatalogoZap.Models;
-using Sprache;
 
 namespace CatalogoZap.Repositories;
 
