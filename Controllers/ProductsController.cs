@@ -39,4 +39,28 @@ public class ProductsController : ControllerBase
 		try { return Ok(await _productsService.GetProducts(storeId, UserId)); }
 		catch (Exception err) { return BadRequest(err.Message); }
 	}
+
+	[HttpPatch]
+	public async Task<IActionResult> ModProduct (Guid UserId, Guid StoreId, ModProductsDTO Product)
+	{
+		try
+		{
+			return Ok(await _productsService.ModProducts(UserId, StoreId, Product));
+		} catch (Exception error)
+		{
+			return BadRequest(error.Message);
+		}
+	}
+
+	[HttpDelete]
+	public async Task<IActionResult> DeleteProduct (Guid IdPro, Guid UserId, Guid StoreId)
+	{
+		try
+		{
+			return Ok(await _productsService.DeleteProduct( IdPro, UserId, StoreId));
+		} catch (Exception error)
+		{
+			return BadRequest(error.Message);
+		}
+	}
 }

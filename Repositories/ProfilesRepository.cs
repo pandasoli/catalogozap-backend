@@ -24,7 +24,8 @@ public class ProfilesRepository : IProfilesRepository
                 logo_url AS LogoUrl,
                 created_at AS CreatedAt,
                 email AS Email,
-                premium AS Premium
+                premium AS Premium,
+                password as Password
             FROM profiles 
             WHERE id = @userId
         ";
@@ -62,5 +63,23 @@ public class ProfilesRepository : IProfilesRepository
             email = register.Email,
             password = register.HashPassword
         });
+    }
+
+    public async Task<string> ModProfile(Guid userId, ProfileModel newdata)
+    {
+        var query = @"
+            UPDATE profiles
+            SET
+                username = @Username,
+                bio = @Bio,
+                phone = @Phone,
+                logo_url = @LogoUrl,
+                email = @Email,
+                password = @Password
+            where id = @Id
+        ";
+        await _conn.ExecuteAsync(query, newdata);
+
+        return "Registration updated successfully.";
     }
 }

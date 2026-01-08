@@ -90,4 +90,34 @@ public class ProductsRepository : IProductsRepository
 
         return products.ToList();
     }
+
+    public async Task<string> ModProducts (ProductModel product)
+    {
+        var query = @"
+            UPDATE products
+            SET 
+                name = @Name,
+                price_cents = @PriceCents,
+                photo_url = @PhotoUrl,
+                avaliable = @Avaliable
+            WHERE store_id = @StoreId AND user_id = @UserId
+             ";
+        await _conn.QueryAsync(query, product);
+        return "product updated successfully.";
+    }
+
+    public async Task<string> DeleteProduct (Guid IdPro, Guid StoreId, Guid UserID)
+    {
+        var query = @"
+            DELETE FROM products WHERE id = @Idpro AND store_id = @storeId AND user_id = @userID";
+
+        await _conn.QueryAsync(query, new
+        {
+            userId = UserID,
+            storeId = StoreId,
+            Idpro = IdPro
+        });
+
+        return "Product successfully deleted.";
+    }
 }

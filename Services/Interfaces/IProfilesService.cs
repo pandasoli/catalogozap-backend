@@ -9,4 +9,6 @@ public interface IProfilesService
     Task<string> Login(LoginDTO dto);
     Task Register(RegisterDTO dto);
     Task<ProfileModel> GetProfiles(Guid UserId);
+
+    Task <string>ModProfile(Guid userId, ModProfileDTO update);
 }
