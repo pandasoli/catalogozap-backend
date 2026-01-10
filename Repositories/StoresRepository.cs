@@ -37,7 +37,7 @@ public class StoresRepository : IStoresRepository
         var query = @"
         INSERT INTO stores
             (user_id, name, bio, logo_url)
-        value 
+        values 
             (@UserId, @Name, @Bio, @LogoUrl)";
 
         await _conn.QueryAsync(query, store);
@@ -48,7 +48,7 @@ public class StoresRepository : IStoresRepository
     public async Task<string> ModStore (StoreModel store)
     {
         var query = @"
-            UPDATE store
+            UPDATE stores
             SET 
                 name = @Name,
                 bio = @Bio,
@@ -63,7 +63,7 @@ public class StoresRepository : IStoresRepository
     public async Task<string> DeleteStore (Guid storeId, Guid userId)
     {
         var query = @"
-            DELETE FROM store WHERE id = @StoreId AND user_id = @UserID";
+            DELETE FROM stores WHERE id = @StoreId AND user_id = @UserId";
 
         await _conn.QueryAsync(query, new {
             UserId = userId,

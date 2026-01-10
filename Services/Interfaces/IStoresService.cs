@@ -7,6 +7,6 @@ public interface IStoresService
 {
     Task<List<StoreModel>> GetStores(Guid UserId);
     Task<string> CreatStore (StoreDTO newStore);
-    Task<string> ModStore (ModStoreDTO store);
+    Task<string> ModStore (ModStoreDTO store, Guid StoreId, Guid UserId);
     Task<string> DeleteStore (Guid UserID, Guid StoreId);
 }
