@@ -23,11 +23,11 @@ public class ProfilesController : ControllerBase
     }
 
     [HttpPatch]
-    public async Task<IActionResult> ModProfile(Guid UserId, ModProfileDTO update)
+    public async Task<IActionResult> ModProfile(ModProfileDTO update)
     {
         try { 
 
-            return Ok(await _profilesService.ModProfile(UserId, update));
+            return Ok(await _profilesService.ModProfile(update));
             } 
             catch (Exception err) { return NotFound(err.Message);}
     }

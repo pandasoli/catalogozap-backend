@@ -38,11 +38,11 @@ public class StoresController : ControllerBase
 	}
 
 	[HttpPatch]
-	public async Task<IActionResult> PatchStore (ModStoreDTO Store, Guid StoreId, Guid UserId)
+	public async Task<IActionResult> PatchStore (ModStoreDTO Store)
 	{
 		try
 		{
-			return Ok(await _storesService.ModStore(Store, StoreId, UserId));
+			return Ok(await _storesService.ModStore(Store));
 		} catch (Exception Error)
 		{
 			return BadRequest(Error.Message);

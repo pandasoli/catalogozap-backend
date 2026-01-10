@@ -33,14 +33,14 @@ public class StoresService : IStoresService
         return await _storesRepository.CreatStore(newStore);
     }
 
-    public async Task<string> ModStore (ModStoreDTO store, Guid StoreId, Guid UserId)
+    public async Task<string> ModStore (ModStoreDTO store)
     {
-        var oldStore = await _storesRepository.SelectStores(StoreId);
+        var oldStore = await _storesRepository.SelectStores(store.StoreId);
 
         var newStore = new StoreModel
         {
-            Id = StoreId,
-            UserId = UserId,
+            Id = store.StoreId,
+            UserId = store.UserId,
             Name = store.Name ?? oldStore[0].Name,
             Bio = store.Bio ?? oldStore[0].Bio,
             LogoUrl = store.LogoUrl ?? oldStore[0].LogoUrl
