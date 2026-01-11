@@ -65,7 +65,7 @@ public class ProfilesRepository : IProfilesRepository
         });
     }
 
-    public async Task<string> ModProfile(Guid userId, ProfileModel newdata)
+    public async Task ModProfile(Guid userId, ProfileModel newdata)
     {
         var query = @"
             UPDATE profiles
@@ -79,7 +79,5 @@ public class ProfilesRepository : IProfilesRepository
             where id = @Id
         ";
         await _conn.ExecuteAsync(query, newdata);
-
-        return "Registration updated successfully.";
     }
 }

@@ -42,7 +42,7 @@ public class ProductsController : ControllerBase
 
 	[HttpPatch]
 	[Authorize]
-	public async Task<IActionResult> ModProduct (Guid StoreId, ModProductsDTO Product)
+	public async Task<IActionResult> ModProduct (ModProductsDTO Product)
 	{
 		var UserId = TokenService.GetUserId(User);
 		try
@@ -56,15 +56,17 @@ public class ProductsController : ControllerBase
 
 	[HttpDelete]
 	[Authorize]
-	public async Task<IActionResult> DeleteProduct (Guid IdPro, Guid StoreId)
+	public async Task<IActionResult> DeleteProduct (Guid Id, Guid StoreId)
 	{
 		var UserId = TokenService.GetUserId(User);
 		try
 		{
-			return Ok(await _productsService.DeleteProduct( IdPro, UserId, StoreId));
+			await _productsService.DeleteProduct( Id, UserId, StoreId);
 		} catch (Exception error)
 		{
 			return BadRequest(error.Message);
 		}
+
+		return Ok();
 	}
 }

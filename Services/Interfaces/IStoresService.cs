@@ -6,7 +6,7 @@ namespace CatalogoZap.Services.Interfaces;
 public interface IStoresService
 {
     Task<List<StoreModel>> GetStores(Guid UserId);
-    Task<string> CreatStore (StoreDTO newStore, Guid UserId);
-    Task<string> ModStore (ModStoreDTO store, Guid UserId);
-    Task<string> DeleteStore (Guid UserID, Guid StoreId);
+    Task CreatStore (StoreDTO newStore, Guid UserId);
+    Task ModStore (ModifyStoreDTO store, Guid UserId);
+    Task DeleteStore (Guid UserID, Guid StoreId);
 }

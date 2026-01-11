@@ -16,19 +16,22 @@ public class ProductsService : IProductsService
         ICloudinaryService cloudinaryService,
         IProfilesService profilesService,
         IProductsRepository productsRepository
-    ) {
+    )
+    {
         _cloudinaryService = cloudinaryService;
         _profilesService = profilesService;
         _productsRepository = productsRepository;
     }
 
-    public async Task CreateProduct(ProductDTO dto, Guid userId) {
+    public async Task CreateProduct(ProductDTO dto, Guid userId)
+    {
         if (await _profilesService.HasReachedFreeTierLimit(userId))
             throw new Exception("Reached free plan products limit.");
 
         string photoUrl = await _cloudinaryService.UploadImageAsync(dto.Photo);
 
-        var data = new ProductModel {
+        var data = new ProductModel
+        {
             Id = userId,
             UserId = userId,
             PhotoUrl = photoUrl,
@@ -44,7 +47,7 @@ public class ProductsService : IProductsService
 
     public async Task<List<ProductModel>> GetProducts(Guid storeId, Guid? UserId)
     {
-        if(UserId == null)
+        if (UserId == null)
         {
             return await _productsRepository.GetProducts(storeId);
         }
@@ -54,7 +57,7 @@ public class ProductsService : IProductsService
         }
     }
 
-    public async Task<string> ModProducts (ModProductsDTO product, Guid UserId)
+    public async Task<string> ModProducts(ModProductsDTO product, Guid UserId)
     {
         var oldProduct = await _productsRepository.GetProducts(product.StoreId);
 
@@ -73,20 +76,29 @@ public class ProductsService : IProductsService
         try
         {
             return await _productsRepository.ModProducts(newproduct);
-        } catch
+        }
+        catch
         {
             throw new Exception("Sorry, it seems something went wrong.");
         }
     }
 
-    public async Task<string> DeleteProduct (Guid IdPro, Guid UserId, Guid StoreId)
+    public async Task DeleteProduct(Guid Id, Guid UserId, Guid StoreId)
     {
-        try
+        ProductModel product = await _productsRepository.GetProductById(Id) ?? throw new Exception("Product not found");
+
+        await _productsRepository.DeleteProduct(Id, StoreId, UserId);
+
+        if (!string.IsNullOrWhiteSpace(product.PhotoUrl))
         {
-            return await _productsRepository.DeleteProduct(IdPro, UserId, StoreId);
-        } catch
-        {
-            throw new Exception("Sorry, it seems something went wrong.");
+            int startIndex = product.PhotoUrl.IndexOf("products/");
+            if (startIndex != -1)
+            {
+                string fullPathWithExtension = product.PhotoUrl.Substring(startIndex);
+                int lastDotIndex = fullPathWithExtension.LastIndexOf('.');
+                string PhotoUrlPath = (lastDotIndex != -1) ? fullPathWithExtension.Substring(0, lastDotIndex) : fullPathWithExtension;
+                await _cloudinaryService.DeleteImageAsync(PhotoUrlPath);
+            }
         }
     }
 }

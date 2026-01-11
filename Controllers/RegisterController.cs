@@ -21,6 +21,6 @@ public class RegisterController : ControllerBase
         try { await _profilesService.Register(dto); }
         catch (Exception err) { return Unauthorized(err.Message); }
 
-        return Ok();
+        return Created();
     }
 }

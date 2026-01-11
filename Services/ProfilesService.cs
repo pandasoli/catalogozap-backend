@@ -56,9 +56,9 @@ public class ProfilesService : IProfilesService
         return await _profilesRepository.GetProfileById(UserId) ?? throw new Exception("Profile not found");
     }
 
-    public async Task<string> ModProfile(ModProfileDTO update, Guid UserId)
+    public async Task ModProfile(ModifyProfileDTO update, Guid UserId)
     {
-        var oldProfile = await _profilesRepository.GetProfileById(UserId);
+        var oldProfile = await _profilesRepository.GetProfileById(UserId) ?? throw new Exception("Profile doesnt exists");
         var newdata = new ProfileModel
         {
           Id = UserId,
@@ -70,9 +70,8 @@ public class ProfilesService : IProfilesService
           Email = update.Email ?? oldProfile.Email,
           Premium = oldProfile.Premium,
           Password = update.Password ?? oldProfile.Password
-
         };
         
-        return await _profilesRepository.ModProfile(UserId, newdata) ?? throw new Exception("Profile not found");
+        await _profilesRepository.ModProfile(UserId, newdata);
     }
 }

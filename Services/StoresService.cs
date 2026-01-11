@@ -2,16 +2,19 @@ using CatalogoZap.Models;
 using CatalogoZap.Services.Interfaces;
 using CatalogoZap.Repositories.Interfaces;
 using CatalogoZap.DTOs;
+using CatalogoZap.Infrastructure.CloudinaryService;
 
 namespace CatalogoZap.Services;
 
 public class StoresService : IStoresService
-{  
+{
     private readonly IStoresRepository _storesRepository;
+    private readonly ICloudinaryService _cloudinaryService;
 
-    public StoresService(IStoresRepository storesRepository)
+    public StoresService(IStoresRepository storesRepository, ICloudinaryService cloudinaryService)
     {
         _storesRepository = storesRepository;
+        _cloudinaryService = cloudinaryService;
     }
 
     public async Task<List<StoreModel>> GetStores(Guid UserId)
@@ -19,21 +22,22 @@ public class StoresService : IStoresService
         return await _storesRepository.SelectStores(UserId);
     }
 
-    public async Task<string> CreatStore (StoreDTO store, Guid UserId)
+    public async Task CreatStore(StoreDTO store, Guid UserId)
     {
+        string logoUrl = await _cloudinaryService.UploadImageAsync(store.Photo);
+
         var newStore = new StoreModel
         {
-            Id = store.Id,
             UserId = UserId,
             Name = store.Name,
             Bio = store.Bio,
-            LogoUrl = store.LogoUrl
+            LogoUrl = logoUrl
         };
 
-        return await _storesRepository.CreatStore(newStore);
+        await _storesRepository.CreatStore(newStore);
     }
 
-    public async Task<string> ModStore (ModStoreDTO store, Guid UserId)
+    public async Task ModStore(ModifyStoreDTO store, Guid UserId)
     {
         var oldStore = await _storesRepository.SelectStores(store.StoreId);
 
@@ -46,12 +50,26 @@ public class StoresService : IStoresService
             LogoUrl = store.LogoUrl ?? oldStore[0].LogoUrl
         };
 
-        return await _storesRepository.ModStore(newStore);
+        await _storesRepository.ModStore(newStore);
     }
 
-    public async Task<string> DeleteStore (Guid UserId, Guid StoreId)
+    public async Task DeleteStore(Guid UserId, Guid StoreId)
     {
-        return await _storesRepository.DeleteStore(UserId, StoreId);
+        StoreModel store = await _storesRepository.SelectStoreById(StoreId) ?? throw new Exception("Store not found");
+
+        await _storesRepository.DeleteStore(UserId, StoreId);
+
+        if (!string.IsNullOrWhiteSpace(store.LogoUrl))
+        {
+            int startIndex = store.LogoUrl.IndexOf("products/");
+            if (startIndex != -1)
+            {
+                string fullPathWithExtension = store.LogoUrl.Substring(startIndex);
+                int lastDotIndex = fullPathWithExtension.LastIndexOf('.');
+                string PhotoUrlPath = (lastDotIndex != -1) ? fullPathWithExtension.Substring(0, lastDotIndex) : fullPathWithExtension;
+                await _cloudinaryService.DeleteImageAsync(PhotoUrlPath);
+            }
+        }
     }
-    
+
 }

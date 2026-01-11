@@ -1,15 +1,19 @@
+using System.ComponentModel.DataAnnotations;
+using CatalogoZap.Attributes;
+
 namespace CatalogoZap.DTOs;
 
 public class StoreDTO
 {
-    required public Guid Id {get; set;}
-    required public Guid UserId { get; set; }
-    required public string Name { get; set; }
-    required public string Bio { get; set; }
-    required public string LogoUrl { get; set; }
+    [Required] required public string Name { get; set; }
+    [Required] required public string Bio { get; set; }
+
+    [Required]
+    [MaxFileSize(6 * 1024 * 1024)]
+    public required IFormFile Photo { get; set; }
 }
 
-public class ModStoreDTO
+public class ModifyStoreDTO
 {
     required public Guid StoreId { get; set; }
     public string? Name { get; set; }

@@ -26,13 +26,13 @@ public class ProfilesController : ControllerBase
 
     [HttpPatch]
     [Authorize]
-    public async Task<IActionResult> ModProfile(ModProfileDTO update)
+    public async Task<IActionResult> ModProfile(ModifyProfileDTO update)
     {
         var UserId = TokenService.GetUserId(User);
-        try { 
 
-            return Ok(await _profilesService.ModProfile(update, UserId));
-            } 
-            catch (Exception err) { return NotFound(err.Message);}
+        try { await _profilesService.ModProfile(update, UserId); }
+        catch (Exception err) { return NotFound(err.Message); }
+
+        return Ok();
     }
 }

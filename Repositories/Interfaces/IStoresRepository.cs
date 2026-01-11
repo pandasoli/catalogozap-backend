@@ -9,4 +9,6 @@ public interface IStoresRepository
     Task<string> CreatStore(StoreModel store);
     Task<string>ModStore(StoreModel store);
     Task<string> DeleteStore (Guid UserId, Guid StoreId);
+    Task<StoreModel?> SelectStoreById(Guid Id);
+    
 }

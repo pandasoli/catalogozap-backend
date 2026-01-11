@@ -68,6 +68,28 @@ public class ProductsRepository : IProductsRepository
         return products.ToList();
     }
 
+    public async Task<ProductModel?> GetProductById(Guid Id)
+    {
+        var query = @"
+        SELECT 
+            id AS Id,
+            user_id AS UserId,
+            name AS Name,
+            price_cents AS PriceCents,
+            photo_url AS PhotoUrl,
+            store_id AS StoreId,
+            avaliable AS Avaliable
+        FROM products 
+        WHERE id = @id";
+
+        var products = await _conn.QuerySingleOrDefaultAsync<ProductModel>(query, new
+        {
+            id = Id
+        });
+
+        return products;
+    }
+
     public async Task<List<ProductModel>> GetProductsAdmin(Guid storeId, Guid? UserId)
     {
         var query = @"
@@ -91,7 +113,7 @@ public class ProductsRepository : IProductsRepository
         return products.ToList();
     }
 
-    public async Task<string> ModProducts (ProductModel product)
+    public async Task<string> ModProducts(ProductModel product)
     {
         var query = @"
             UPDATE products
@@ -106,18 +128,16 @@ public class ProductsRepository : IProductsRepository
         return "product updated successfully.";
     }
 
-    public async Task<string> DeleteProduct (Guid IdPro, Guid StoreId, Guid UserID)
+    public async Task DeleteProduct(Guid Id, Guid StoreId, Guid UserID)
     {
         var query = @"
-            DELETE FROM products WHERE id = @Idpro AND store_id = @storeId AND user_id = @userID";
+            DELETE FROM products WHERE id = @Id AND store_id = @storeId AND user_id = @userID";
 
         await _conn.QueryAsync(query, new
         {
-            userId = UserID,
+            userID = UserID,
             storeId = StoreId,
-            Idpro = IdPro
+            Id
         });
-
-        return "Product successfully deleted.";
     }
 }

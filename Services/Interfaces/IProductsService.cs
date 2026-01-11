@@ -9,5 +9,5 @@ public interface IProductsService
     Task<List<ProductModel>> GetProducts(Guid storeId, Guid? UserId);
 
     Task<string> ModProducts (ModProductsDTO Product, Guid UserID);
-    Task<string> DeleteProduct (Guid IdPro, Guid UserId, Guid StoreId);
+    Task DeleteProduct (Guid IdPro, Guid UserId, Guid StoreId);
 }

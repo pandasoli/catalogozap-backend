@@ -30,27 +30,26 @@ public class StoresController : ControllerBase
 
 	[HttpPost]
 	[Authorize]
-	public async Task<IActionResult> PostStore (StoreDTO newStore)
+	public async Task<IActionResult> PostStore ([FromForm] StoreDTO newStore)
 	{
 		var UserId = TokenService.GetUserId(User);
-		try
-		{
-			return Ok(await _storesService.CreatStore(newStore, UserId));
-		} catch (Exception Error) { return BadRequest(Error.Message);}
+
+		try{ await _storesService.CreatStore(newStore, UserId); }
+		catch (Exception Error) { return BadRequest(Error.Message);}
+
+		return Ok();
 	}
 
 	[HttpPatch]
 	[Authorize]
-	public async Task<IActionResult> PatchStore (ModStoreDTO Store)
+	public async Task<IActionResult> PatchStore (ModifyStoreDTO Store)
 	{
 		var UserId = TokenService.GetUserId(User);
-		try
-		{
-			return Ok(await _storesService.ModStore(Store, UserId));
-		} catch (Exception Error)
-		{
-			return BadRequest(Error.Message);
-		}
+
+		try { await _storesService.ModStore(Store, UserId); } 
+		catch (Exception Error) { return BadRequest(Error.Message); }
+
+		return Ok();
 	}
 
 	[HttpDelete]
@@ -58,12 +57,10 @@ public class StoresController : ControllerBase
 	public async Task<IActionResult> DeleteStore (Guid StoreId)
 	{
 		var UserId = TokenService.GetUserId(User);
-		try
-		{
-			return Ok(await _storesService.DeleteStore(UserId, StoreId));
-		} catch (Exception Error)
-		{
-			return BadRequest(Error.Message);
-		}
+		
+		try { await _storesService.DeleteStore(UserId, StoreId); }
+		catch (Exception Error) { return BadRequest(Error.Message); }
+
+		return Ok();
 	}
 }
