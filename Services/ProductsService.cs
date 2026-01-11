@@ -54,15 +54,15 @@ public class ProductsService : IProductsService
         }
     }
 
-    public async Task<string> ModProducts (Guid StoreId, Guid UserId, ModProductsDTO product)
+    public async Task<string> ModProducts (ModProductsDTO product, Guid UserId)
     {
-        var oldProduct = await _productsRepository.GetProducts(StoreId);
+        var oldProduct = await _productsRepository.GetProducts(product.StoreId);
 
         var newproduct = new ProductModel
         {
             Id = oldProduct[0].Id,
             UserId = UserId,
-            StoreId = StoreId,
+            StoreId = product.StoreId,
             Name = product.Name ?? oldProduct[0].Name,
             PriceCents = product.PriceCents ?? oldProduct[0].PriceCents,
             PhotoUrl = oldProduct[0].PhotoUrl,

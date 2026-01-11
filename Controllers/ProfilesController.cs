@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using CatalogoZap.Services.Interfaces;
 using CatalogoZap.DTOs;
+using CatalogoZap.Infrastructure.JWT;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CatalogoZap.Controllers;
 
@@ -23,11 +25,13 @@ public class ProfilesController : ControllerBase
     }
 
     [HttpPatch]
+    [Authorize]
     public async Task<IActionResult> ModProfile(ModProfileDTO update)
     {
+        var UserId = TokenService.GetUserId(User);
         try { 
 
-            return Ok(await _profilesService.ModProfile(update));
+            return Ok(await _profilesService.ModProfile(update, UserId));
             } 
             catch (Exception err) { return NotFound(err.Message);}
     }

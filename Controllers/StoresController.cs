@@ -29,20 +29,24 @@ public class StoresController : ControllerBase
 	}
 
 	[HttpPost]
+	[Authorize]
 	public async Task<IActionResult> PostStore (StoreDTO newStore)
 	{
+		var UserId = TokenService.GetUserId(User);
 		try
 		{
-			return Ok(await _storesService.CreatStore(newStore));
+			return Ok(await _storesService.CreatStore(newStore, UserId));
 		} catch (Exception Error) { return BadRequest(Error.Message);}
 	}
 
 	[HttpPatch]
+	[Authorize]
 	public async Task<IActionResult> PatchStore (ModStoreDTO Store)
 	{
+		var UserId = TokenService.GetUserId(User);
 		try
 		{
-			return Ok(await _storesService.ModStore(Store));
+			return Ok(await _storesService.ModStore(Store, UserId));
 		} catch (Exception Error)
 		{
 			return BadRequest(Error.Message);
@@ -50,8 +54,10 @@ public class StoresController : ControllerBase
 	}
 
 	[HttpDelete]
-	public async Task<IActionResult> DeleteStore (Guid UserId, Guid StoreId)
+	[Authorize]
+	public async Task<IActionResult> DeleteStore (Guid StoreId)
 	{
+		var UserId = TokenService.GetUserId(User);
 		try
 		{
 			return Ok(await _storesService.DeleteStore(UserId, StoreId));

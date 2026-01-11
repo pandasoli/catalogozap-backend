@@ -56,12 +56,12 @@ public class ProfilesService : IProfilesService
         return await _profilesRepository.GetProfileById(UserId) ?? throw new Exception("Profile not found");
     }
 
-    public async Task<string> ModProfile(ModProfileDTO update)
+    public async Task<string> ModProfile(ModProfileDTO update, Guid UserId)
     {
-        var oldProfile = await _profilesRepository.GetProfileById(update.UserId);
+        var oldProfile = await _profilesRepository.GetProfileById(UserId);
         var newdata = new ProfileModel
         {
-          Id = update.UserId,
+          Id = UserId,
           Username = update.Name ?? oldProfile.Username,
           Bio = update.Bio ?? oldProfile.Bio,
           Phone = update.Phone ?? oldProfile.Phone,
@@ -73,6 +73,6 @@ public class ProfilesService : IProfilesService
 
         };
         
-        return await _profilesRepository.ModProfile(update.UserId, newdata) ?? throw new Exception("Profile not found");
+        return await _profilesRepository.ModProfile(UserId, newdata) ?? throw new Exception("Profile not found");
     }
 }

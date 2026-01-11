@@ -2,7 +2,6 @@ namespace CatalogoZap.DTOs
 {
     public class ModProfileDTO
     {
-        required public Guid UserId { get; set; }
         public string? Name {get; set;}
 
         public string? Bio {get; set;}

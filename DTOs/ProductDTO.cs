@@ -18,6 +18,7 @@ public class ProductDTO
 
 public class ModProductsDTO
 {
+    required public Guid StoreId { get; set; }
     public string? Name { get; set; }
 
     public decimal? PriceCents { get; set; }

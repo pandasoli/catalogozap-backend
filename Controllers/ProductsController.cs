@@ -41,11 +41,13 @@ public class ProductsController : ControllerBase
 	}
 
 	[HttpPatch]
-	public async Task<IActionResult> ModProduct (Guid UserId, Guid StoreId, ModProductsDTO Product)
+	[Authorize]
+	public async Task<IActionResult> ModProduct (Guid StoreId, ModProductsDTO Product)
 	{
+		var UserId = TokenService.GetUserId(User);
 		try
 		{
-			return Ok(await _productsService.ModProducts(UserId, StoreId, Product));
+			return Ok(await _productsService.ModProducts(Product, UserId));
 		} catch (Exception error)
 		{
 			return BadRequest(error.Message);
@@ -53,8 +55,10 @@ public class ProductsController : ControllerBase
 	}
 
 	[HttpDelete]
-	public async Task<IActionResult> DeleteProduct (Guid IdPro, Guid UserId, Guid StoreId)
+	[Authorize]
+	public async Task<IActionResult> DeleteProduct (Guid IdPro, Guid StoreId)
 	{
+		var UserId = TokenService.GetUserId(User);
 		try
 		{
 			return Ok(await _productsService.DeleteProduct( IdPro, UserId, StoreId));
