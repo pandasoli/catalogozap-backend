@@ -52,7 +52,7 @@ public class StoresRepository : IStoresRepository
         return store;
     }
 
-    public async Task<string> CreatStore(StoreModel store)
+    public async Task<string> CreateStore(StoreModel store)
     {
         var query = @"
         INSERT INTO stores

@@ -57,29 +57,36 @@ public class ProductsService : IProductsService
         }
     }
 
-    public async Task<string> ModProducts(ModProductsDTO product, Guid UserId)
+    public async Task ModProducts(ModProductsDTO product, Guid UserId)
     {
-        var oldProduct = await _productsRepository.GetProducts(product.StoreId);
+        var oldProduct = await _productsRepository.GetProductById(product.Id) ?? throw new Exception("Product doesnt exists");
+
+        string? photoUrl = product.Photo != null ? await _cloudinaryService.UploadImageAsync(product.Photo) : null;
 
         var newproduct = new ProductModel
         {
-            Id = oldProduct[0].Id,
+            Id = product.Id,
             UserId = UserId,
             StoreId = product.StoreId,
-            Name = product.Name ?? oldProduct[0].Name,
-            PriceCents = product.PriceCents ?? oldProduct[0].PriceCents,
-            PhotoUrl = oldProduct[0].PhotoUrl,
-            Avaliable = product.Avaliable ?? oldProduct[0].Avaliable,
-            Created_at = oldProduct[0].Created_at
+            Name = product.Name ?? oldProduct.Name,
+            PriceCents = product.PriceCents ?? oldProduct.PriceCents,
+            PhotoUrl = photoUrl ?? oldProduct.PhotoUrl,
+            Avaliable = product.Avaliable ?? oldProduct.Avaliable,
+            Created_at = oldProduct.Created_at
         };
 
-        try
+        await _productsRepository.ModProducts(newproduct);
+
+        if (photoUrl != null)
         {
-            return await _productsRepository.ModProducts(newproduct);
-        }
-        catch
-        {
-            throw new Exception("Sorry, it seems something went wrong.");
+            int startIndex = oldProduct.PhotoUrl.IndexOf("products/");
+            if (startIndex != -1)
+            {
+                string fullPathWithExtension = oldProduct.PhotoUrl.Substring(startIndex);
+                int lastDotIndex = fullPathWithExtension.LastIndexOf('.');
+                string PhotoUrlPath = (lastDotIndex != -1) ? fullPathWithExtension.Substring(0, lastDotIndex) : fullPathWithExtension;
+                await _cloudinaryService.DeleteImageAsync(PhotoUrlPath);
+            }
         }
     }
 

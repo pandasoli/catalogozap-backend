@@ -45,13 +45,11 @@ public class ProductsController : ControllerBase
 	public async Task<IActionResult> ModProduct (ModProductsDTO Product)
 	{
 		var UserId = TokenService.GetUserId(User);
-		try
-		{
-			return Ok(await _productsService.ModProducts(Product, UserId));
-		} catch (Exception error)
-		{
-			return BadRequest(error.Message);
-		}
+
+		try { await _productsService.ModProducts(Product, UserId); } 
+		catch (Exception error) { return BadRequest(error.Message); }
+
+		return Ok();
 	}
 
 	[HttpDelete]

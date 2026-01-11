@@ -34,7 +34,7 @@ public class StoresController : ControllerBase
 	{
 		var UserId = TokenService.GetUserId(User);
 
-		try{ await _storesService.CreatStore(newStore, UserId); }
+		try{ await _storesService.CreateStore(newStore, UserId); }
 		catch (Exception Error) { return BadRequest(Error.Message);}
 
 		return Ok();

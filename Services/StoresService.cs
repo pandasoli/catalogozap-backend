@@ -22,7 +22,7 @@ public class StoresService : IStoresService
         return await _storesRepository.SelectStores(UserId);
     }
 
-    public async Task CreatStore(StoreDTO store, Guid UserId)
+    public async Task CreateStore(StoreDTO store, Guid UserId)
     {
         string logoUrl = await _cloudinaryService.UploadImageAsync(store.Photo);
 
@@ -34,7 +34,7 @@ public class StoresService : IStoresService
             LogoUrl = logoUrl
         };
 
-        await _storesRepository.CreatStore(newStore);
+        await _storesRepository.CreateStore(newStore);
     }
 
     public async Task ModStore(ModifyStoreDTO store, Guid UserId)

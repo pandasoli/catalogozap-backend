@@ -113,7 +113,7 @@ public class ProductsRepository : IProductsRepository
         return products.ToList();
     }
 
-    public async Task<string> ModProducts(ProductModel product)
+    public async Task ModProducts(ProductModel product)
     {
         var query = @"
             UPDATE products
@@ -122,10 +122,11 @@ public class ProductsRepository : IProductsRepository
                 price_cents = @PriceCents,
                 photo_url = @PhotoUrl,
                 avaliable = @Avaliable
-            WHERE store_id = @StoreId AND user_id = @UserId
-             ";
+            WHERE store_id = @StoreId
+            AND user_id = @UserId
+        ";
+        
         await _conn.QueryAsync(query, product);
-        return "product updated successfully.";
     }
 
     public async Task DeleteProduct(Guid Id, Guid StoreId, Guid UserID)

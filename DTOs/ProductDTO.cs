@@ -18,11 +18,10 @@ public class ProductDTO
 
 public class ModProductsDTO
 {
-    required public Guid StoreId { get; set; }
+    public Guid Id { get; set; }
+    public Guid StoreId { get; set; }
     public string? Name { get; set; }
-
     public decimal? PriceCents { get; set; }
-
     public bool? Avaliable { get; set; }
     
     [MaxFileSize(6 * 1024 *1024)]
