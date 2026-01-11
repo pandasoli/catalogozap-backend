@@ -113,7 +113,7 @@ public class ProductsRepository : IProductsRepository
         return products.ToList();
     }
 
-    public async Task ModProducts(ProductModel product)
+    public async Task ModifyProducts(ProductModel product)
     {
         var query = @"
             UPDATE products

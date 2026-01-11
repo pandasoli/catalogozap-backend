@@ -3,6 +3,7 @@ using CatalogoZap.DTOs;
 using CatalogoZap.Infrastructure.CloudinaryService;
 using CatalogoZap.Repositories.Interfaces;
 using CatalogoZap.Models;
+using CatalogoZap.Infrastructure.Exceptions;
 
 namespace CatalogoZap.Services;
 
@@ -57,9 +58,9 @@ public class ProductsService : IProductsService
         }
     }
 
-    public async Task ModProducts(ModProductsDTO product, Guid UserId)
+    public async Task ModifyProducts(ModProductsDTO product, Guid UserId)
     {
-        var oldProduct = await _productsRepository.GetProductById(product.Id) ?? throw new Exception("Product doesnt exists");
+        var oldProduct = await _productsRepository.GetProductById(product.Id) ?? throw new NotFoundException("Product doesnt exists");
 
         string? photoUrl = product.Photo != null ? await _cloudinaryService.UploadImageAsync(product.Photo) : null;
 
@@ -75,7 +76,7 @@ public class ProductsService : IProductsService
             Created_at = oldProduct.Created_at
         };
 
-        await _productsRepository.ModProducts(newproduct);
+        await _productsRepository.ModifyProducts(newproduct);
 
         if (photoUrl != null)
         {

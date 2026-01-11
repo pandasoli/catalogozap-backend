@@ -3,6 +3,8 @@ using CatalogoZap.Services.Interfaces;
 using CatalogoZap.Repositories.Interfaces;
 using CatalogoZap.DTOs;
 using CatalogoZap.Infrastructure.CloudinaryService;
+using Microsoft.AspNetCore.Http.HttpResults;
+using CatalogoZap.Infrastructure.Exceptions;
 
 namespace CatalogoZap.Services;
 
@@ -37,25 +39,39 @@ public class StoresService : IStoresService
         await _storesRepository.CreateStore(newStore);
     }
 
-    public async Task ModStore(ModifyStoreDTO store, Guid UserId)
+    public async Task ModifyStore(ModifyStoreDTO store, Guid UserId)
     {
-        var oldStore = await _storesRepository.SelectStores(store.StoreId);
+        var oldStore = await _storesRepository.SelectStoreById(store.StoreId) ?? throw new NotFoundException("Store not found");
+
+        string? photoUrl = store.Photo != null ? await _cloudinaryService.UploadImageAsync(store.Photo) : null;
 
         var newStore = new StoreModel
         {
             Id = store.StoreId,
             UserId = UserId,
-            Name = store.Name ?? oldStore[0].Name,
-            Bio = store.Bio ?? oldStore[0].Bio,
-            LogoUrl = store.LogoUrl ?? oldStore[0].LogoUrl
+            Name = store.Name ?? oldStore.Name,
+            Bio = store.Bio ?? oldStore.Bio,
+            LogoUrl = photoUrl ?? oldStore.LogoUrl
         };
 
         await _storesRepository.ModStore(newStore);
+
+        if (photoUrl != null)
+        {
+            int startIndex = oldStore.LogoUrl.IndexOf("products/");
+            if (startIndex != -1)
+            {
+                string fullPathWithExtension = oldStore.LogoUrl.Substring(startIndex);
+                int lastDotIndex = fullPathWithExtension.LastIndexOf('.');
+                string PhotoUrlPath = (lastDotIndex != -1) ? fullPathWithExtension.Substring(0, lastDotIndex) : fullPathWithExtension;
+                await _cloudinaryService.DeleteImageAsync(PhotoUrlPath);
+            }
+        }
     }
 
     public async Task DeleteStore(Guid UserId, Guid StoreId)
     {
-        StoreModel store = await _storesRepository.SelectStoreById(StoreId) ?? throw new Exception("Store not found");
+        StoreModel store = await _storesRepository.SelectStoreById(StoreId) ?? throw new NotFoundException("Store not found");
 
         await _storesRepository.DeleteStore(UserId, StoreId);
 

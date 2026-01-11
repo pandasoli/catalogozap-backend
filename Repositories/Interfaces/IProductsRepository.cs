@@ -8,7 +8,7 @@ public interface IProductsRepository
     Task CreateProduct(ProductModel data);
     Task<List<ProductModel>> GetProducts(Guid storeId);
     Task<List<ProductModel>> GetProductsAdmin(Guid storeId, Guid? UserId);
-    Task ModProducts (ProductModel product);
-    Task DeleteProduct (Guid Id, Guid StoreID, Guid UserId);
+    Task ModifyProducts(ProductModel product);
+    Task DeleteProduct(Guid Id, Guid StoreID, Guid UserId);
     Task<ProductModel?> GetProductById(Guid Id);
 }

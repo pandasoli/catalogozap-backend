@@ -7,7 +7,6 @@ public interface IProductsService
 {
     Task CreateProduct(ProductDTO dto, Guid UserId);
     Task<List<ProductModel>> GetProducts(Guid storeId, Guid? UserId);
-
-    Task ModProducts (ModProductsDTO Product, Guid UserID);
+    Task ModifyProducts (ModProductsDTO Product, Guid UserID);
     Task DeleteProduct (Guid IdPro, Guid UserId, Guid StoreId);
 }

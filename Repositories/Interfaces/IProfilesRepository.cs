@@ -7,5 +7,5 @@ public interface IProfilesRepository
     Task<ProfileModel?> GetProfileById(Guid userId);
     Task<LoginModel?> SelectUser(string Email);
     Task InsertUser(RegisterModel register);
-    Task ModProfile(Guid userID, ProfileModel update);
+    Task ModifyProfile(Guid userID, ProfileModel update);
 }

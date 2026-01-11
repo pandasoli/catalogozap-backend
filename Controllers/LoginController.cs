@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CatalogoZap.DTOs;
 using CatalogoZap.Services.Interfaces;
+using CatalogoZap.Infrastructure.Exceptions;
 
 namespace CatalogoZap.Controllers;
 
@@ -19,6 +20,7 @@ public class LoginController : ControllerBase
     public async Task<IActionResult> Login(LoginDTO dto)
     {
         try { return Ok(await _profilesService.Login(dto)); }
-        catch (Exception err) { return Unauthorized(err.Message); }
+        catch (UnauthorizedException err) { return Unauthorized(err.Message); }
+        catch (Exception) { return StatusCode(500); }
     }
 }

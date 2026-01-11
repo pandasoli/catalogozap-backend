@@ -65,7 +65,7 @@ public class ProfilesRepository : IProfilesRepository
         });
     }
 
-    public async Task ModProfile(Guid userId, ProfileModel newdata)
+    public async Task ModifyProfile(Guid userId, ProfileModel newdata)
     {
         var query = @"
             UPDATE profiles

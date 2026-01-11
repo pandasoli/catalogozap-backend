@@ -1,4 +1,4 @@
-
+namespace CatalogoZap.Infrastructure.Exceptions;
 
 public class NotFoundException : Exception
 {

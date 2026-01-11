@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using CatalogoZap.Infrastructure.JWT;
 using CatalogoZap.DTOs;
 using CatalogoZap.Services.Interfaces;
-using Microsoft.AspNetCore.Http.HttpResults;
+using CatalogoZap.Infrastructure.Exceptions;
 
 namespace CatalogoZap.Controllers;
 
@@ -25,7 +25,8 @@ public class ProductsController : ControllerBase
         Guid userId = TokenService.GetUserId(User);
 
         try { await _productsService.CreateProduct(dto, userId); }
-        catch (Exception err) { return BadRequest(err.Message); }
+        catch (BadRequestException err) { return BadRequest(err.Message); }
+		catch (Exception) { return StatusCode(500); }
 
 		return Ok();
 	}
@@ -42,11 +43,11 @@ public class ProductsController : ControllerBase
 
 	[HttpPatch]
 	[Authorize]
-	public async Task<IActionResult> ModProduct (ModProductsDTO Product)
+	public async Task<IActionResult> ModifyProduct([FromForm] ModProductsDTO Product)
 	{
 		var UserId = TokenService.GetUserId(User);
 
-		try { await _productsService.ModProducts(Product, UserId); } 
+		try { await _productsService.ModifyProducts(Product, UserId); } 
 		catch (Exception error) { return BadRequest(error.Message); }
 
 		return Ok();
@@ -54,16 +55,12 @@ public class ProductsController : ControllerBase
 
 	[HttpDelete]
 	[Authorize]
-	public async Task<IActionResult> DeleteProduct (Guid Id, Guid StoreId)
+	public async Task<IActionResult> DeleteProduct(Guid Id, Guid StoreId)
 	{
 		var UserId = TokenService.GetUserId(User);
-		try
-		{
-			await _productsService.DeleteProduct( Id, UserId, StoreId);
-		} catch (Exception error)
-		{
-			return BadRequest(error.Message);
-		}
+
+		try { await _productsService.DeleteProduct( Id, UserId, StoreId);} 
+		catch (Exception error) { return BadRequest(error.Message); }
 
 		return Ok();
 	}

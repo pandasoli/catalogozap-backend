@@ -12,5 +12,7 @@ namespace CatalogoZap.DTOs
 
         public string? Password {get; set;}
 
+        public IFormFile? Photo {get; set; }
+
     }
 }

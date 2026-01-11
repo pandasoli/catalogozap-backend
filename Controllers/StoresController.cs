@@ -4,6 +4,7 @@ using CatalogoZap.Infrastructure.JWT;
 using CatalogoZap.Services.Interfaces;
 using CatalogoZap.Models;
 using CatalogoZap.DTOs;
+using CatalogoZap.Infrastructure.Exceptions;
 
 namespace CatalogoZap.Controllers;
 
@@ -25,7 +26,7 @@ public class StoresController : ControllerBase
 		var UserId = TokenService.GetUserId(User);
 
 		try { return Ok(await _storesService.GetStores(UserId)); }
-		catch (Exception err) { return BadRequest(err.Message); }
+		catch (Exception) { return StatusCode(500); }
 	}
 
 	[HttpPost]
@@ -35,7 +36,7 @@ public class StoresController : ControllerBase
 		var UserId = TokenService.GetUserId(User);
 
 		try{ await _storesService.CreateStore(newStore, UserId); }
-		catch (Exception Error) { return BadRequest(Error.Message);}
+		catch (Exception) { return StatusCode(500); }
 
 		return Ok();
 	}
@@ -46,8 +47,9 @@ public class StoresController : ControllerBase
 	{
 		var UserId = TokenService.GetUserId(User);
 
-		try { await _storesService.ModStore(Store, UserId); } 
-		catch (Exception Error) { return BadRequest(Error.Message); }
+		try { await _storesService.ModifyStore(Store, UserId); } 
+		catch (NotFoundException err) { return NotFound(err.Message); }
+		catch (Exception) { return StatusCode(500); }
 
 		return Ok();
 	}
@@ -59,7 +61,8 @@ public class StoresController : ControllerBase
 		var UserId = TokenService.GetUserId(User);
 		
 		try { await _storesService.DeleteStore(UserId, StoreId); }
-		catch (Exception Error) { return BadRequest(Error.Message); }
+		catch (NotFoundException Error) { return NotFound(Error.Message); }
+		catch (Exception) { return StatusCode(500); }
 
 		return Ok();
 	}

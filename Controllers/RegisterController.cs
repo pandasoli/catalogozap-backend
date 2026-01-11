@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CatalogoZap.DTOs;
 using CatalogoZap.Services.Interfaces;
+using CatalogoZap.Infrastructure.Exceptions;
 
 namespace CatalogoZap.Controllers;
 
@@ -19,7 +20,8 @@ public class RegisterController : ControllerBase
     public async Task<IActionResult> Register(RegisterDTO dto)
     {
         try { await _profilesService.Register(dto); }
-        catch (Exception err) { return Unauthorized(err.Message); }
+        catch (UnauthorizedException err) { return Unauthorized(err.Message); }
+        catch (Exception) { return StatusCode(500); }
 
         return Created();
     }

@@ -18,5 +18,5 @@ public class ModifyStoreDTO
     required public Guid StoreId { get; set; }
     public string? Name { get; set; }
     public string? Bio { get; set; }
-    public string? LogoUrl { get; set; }
+    public IFormFile? Photo { get; set; }
 }
