@@ -56,7 +56,8 @@ public class ProductsRepository : IProductsRepository
             price_cents AS PriceCents,
             photo_url AS PhotoUrl,
             store_id AS StoreId,
-            avaliable AS Avaliable
+            avaliable AS Avaliable,
+            created_at AS Created_at
         FROM products 
         WHERE store_id = @store_id AND avaliable = TRUE";
 
