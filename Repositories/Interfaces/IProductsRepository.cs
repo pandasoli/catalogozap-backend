@@ -10,5 +10,5 @@ public interface IProductsRepository
     Task<List<ProductModel>> GetProductsAdmin(Guid storeId, Guid? UserId);
     Task ModifyProducts(ProductModel product);
     Task DeleteProduct(Guid Id, Guid StoreID, Guid UserId);
-    Task<ProductModel?> GetProductById(Guid Id);
+    Task<ProductModel?> GetProductById(Guid Id, Guid StoreId, Guid UserId);
 }

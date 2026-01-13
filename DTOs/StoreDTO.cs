@@ -18,5 +18,7 @@ public class ModifyStoreDTO
     required public Guid StoreId { get; set; }
     public string? Name { get; set; }
     public string? Bio { get; set; }
+    
+    [MaxFileSize(6 * 1024 * 1024)]
     public IFormFile? Photo { get; set; }
 }

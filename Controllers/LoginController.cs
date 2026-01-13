@@ -21,6 +21,6 @@ public class LoginController : ControllerBase
     {
         try { return Ok(await _profilesService.Login(dto)); }
         catch (UnauthorizedException err) { return Unauthorized(err.Message); }
-        catch (Exception) { return StatusCode(500); }
+        catch (Exception err) { Console.WriteLine(err); return StatusCode(500); }
     }
 }

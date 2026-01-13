@@ -59,6 +59,10 @@ public class ProductsController : ControllerBase
 	{
 		var UserId = TokenService.GetUserId(User);
 
+		Console.WriteLine(Id);
+		System.Console.WriteLine(StoreId);
+		System.Console.WriteLine(UserId);
+
 		try { await _productsService.DeleteProduct( Id, UserId, StoreId);} 
 		catch (Exception error) { return BadRequest(error.Message); }
 

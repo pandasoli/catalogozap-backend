@@ -68,7 +68,7 @@ public class ProductsRepository : IProductsRepository
         return products.ToList();
     }
 
-    public async Task<ProductModel?> GetProductById(Guid Id)
+    public async Task<ProductModel?> GetProductById(Guid Id, Guid StoreId, Guid UserId)
     {
         var query = @"
         SELECT 
@@ -80,11 +80,13 @@ public class ProductsRepository : IProductsRepository
             store_id AS StoreId,
             avaliable AS Avaliable
         FROM products 
-        WHERE id = @id";
+        WHERE id = @id AND store_id = @store_id AND user_id = @user_id";
 
         var products = await _conn.QuerySingleOrDefaultAsync<ProductModel>(query, new
         {
-            id = Id
+            id = Id,
+            store_id = StoreId,
+            user_id = UserId
         });
 
         return products;

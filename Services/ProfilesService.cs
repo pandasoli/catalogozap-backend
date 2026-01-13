@@ -66,6 +66,8 @@ public class ProfilesService : IProfilesService
 
         string? photoUrl = update.Photo != null ? await _cloudinaryService.UploadImageAsync(update.Photo) : null;
 
+        string? password = update.Password != null ? BCrypt.Net.BCrypt.HashPassword(update.Password, workFactor: 12) : null;
+
         var newdata = new ProfileModel
         {
             Id = UserId,
@@ -76,7 +78,7 @@ public class ProfilesService : IProfilesService
             CreatedAt = oldProfile.CreatedAt,
             Email = update.Email ?? oldProfile.Email,
             Premium = oldProfile.Premium,
-            Password = update.Password ?? oldProfile.Password
+            Password = password ?? oldProfile.Password
         };
 
         await _profilesRepository.ModifyProfile(UserId, newdata);

@@ -4,6 +4,7 @@ using CatalogoZap.Infrastructure.CloudinaryService;
 using CatalogoZap.Repositories.Interfaces;
 using CatalogoZap.Models;
 using CatalogoZap.Infrastructure.Exceptions;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace CatalogoZap.Services;
 
@@ -60,7 +61,7 @@ public class ProductsService : IProductsService
 
     public async Task ModifyProducts(ModProductsDTO product, Guid UserId)
     {
-        var oldProduct = await _productsRepository.GetProductById(product.Id) ?? throw new NotFoundException("Product doesnt exists");
+        var oldProduct = await _productsRepository.GetProductById(product.Id, product.StoreId, UserId) ?? throw new NotFoundException("Product doesnt exists");
 
         string? photoUrl = product.Photo != null ? await _cloudinaryService.UploadImageAsync(product.Photo) : null;
 
@@ -93,7 +94,9 @@ public class ProductsService : IProductsService
 
     public async Task DeleteProduct(Guid Id, Guid UserId, Guid StoreId)
     {
-        ProductModel product = await _productsRepository.GetProductById(Id) ?? throw new Exception("Product not found");
+        ProductModel product = await _productsRepository.GetProductById(Id, StoreId, UserId) ?? throw new NotFoundException("Product not found");
+
+        System.Console.WriteLine(product.Name);
 
         await _productsRepository.DeleteProduct(Id, StoreId, UserId);
 
