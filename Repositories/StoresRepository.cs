@@ -17,6 +17,7 @@ public class StoresRepository : IStoresRepository
         var query = @"
             SELECT 
                 id AS Id,
+                user_id AS UserId,
                 name AS Name,
                 bio AS Bio,
                 logo_url AS LogoUrl
@@ -37,6 +38,7 @@ public class StoresRepository : IStoresRepository
         var query = @"
             SELECT 
                 id AS Id,
+                user_id AS UserId,
                 name AS Name,
                 bio AS Bio,
                 logo_url AS LogoUrl

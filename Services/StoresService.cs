@@ -1,6 +1,7 @@
 using CatalogoZap.Models;
 using CatalogoZap.Services.Interfaces;
 using CatalogoZap.Repositories.Interfaces;
+using CatalogoZap.Services.Interfaces;
 using CatalogoZap.DTOs;
 using CatalogoZap.Infrastructure.CloudinaryService;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -11,11 +12,13 @@ namespace CatalogoZap.Services;
 public class StoresService : IStoresService
 {
     private readonly IStoresRepository _storesRepository;
+    private readonly IProductsService _productsService;
     private readonly ICloudinaryService _cloudinaryService;
 
-    public StoresService(IStoresRepository storesRepository, ICloudinaryService cloudinaryService)
+    public StoresService(IStoresRepository storesRepository, ICloudinaryService cloudinaryService, IProductsService productsService)
     {
         _storesRepository = storesRepository;
+        _productsService = productsService;
         _cloudinaryService = cloudinaryService;
     }
 
@@ -85,6 +88,12 @@ public class StoresService : IStoresService
                 string PhotoUrlPath = (lastDotIndex != -1) ? fullPathWithExtension.Substring(0, lastDotIndex) : fullPathWithExtension;
                 await _cloudinaryService.DeleteImageAsync(PhotoUrlPath);
             }
+        }
+
+        var products = await _productsService.GetProducts(StoreId, null);
+
+        foreach(var product in products){
+            await _productsService.DeleteProduct(product.Id, product.UserId, product.StoreId);
         }
     }
 

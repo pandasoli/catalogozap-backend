@@ -32,7 +32,7 @@ public class ProfilesService : IProfilesService
 
     public async Task<string> Login(LoginDTO dto)
     {
-        var DbData = await _profilesRepository.SelectUser(dto.Email) ?? throw new UnauthorizedException("User doesnt exist");
+        var DbData = await _profilesRepository.GetProfileByEmail(dto.Email) ?? throw new UnauthorizedException("User doesnt exist");
 
         if (!BCrypt.Net.BCrypt.Verify(dto.Password, DbData.Password)) throw new UnauthorizedException("Incorrect Password");
 
@@ -41,7 +41,7 @@ public class ProfilesService : IProfilesService
 
     public async Task Register(RegisterDTO dto)
     {
-        if (await _profilesRepository.SelectUser(dto.Email) != null) throw new UnauthorizedException("User already exist");
+        if (await _profilesRepository.GetProfileByEmail(dto.Email) != null) throw new UnauthorizedException("User already exist");
 
         string HashPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password, workFactor: 12);
 
@@ -57,7 +57,7 @@ public class ProfilesService : IProfilesService
 
     public async Task<ProfileModel> GetProfiles(Guid UserId)
     {
-        return await _profilesRepository.GetProfileById(UserId) ?? throw new NotFoundException("Profile not found");
+        return await _profilesRepository.PublicGetProfileById(UserId) ?? throw new NotFoundException("Profile not found");
     }
 
     public async Task ModifyProfile(ModifyProfileDTO update, Guid UserId)

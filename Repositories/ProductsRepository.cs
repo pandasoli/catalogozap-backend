@@ -135,7 +135,8 @@ public class ProductsRepository : IProductsRepository
     public async Task DeleteProduct(Guid Id, Guid StoreId, Guid UserID)
     {
         var query = @"
-            DELETE FROM products WHERE id = @Id AND store_id = @storeId AND user_id = @userID";
+            DELETE FROM products WHERE id = @Id AND store_id = @storeId AND user_id = @userID
+        ";
 
         await _conn.QueryAsync(query, new
         {

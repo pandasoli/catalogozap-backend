@@ -18,6 +18,7 @@ public class ProfilesRepository : IProfilesRepository
     {
         var query = @"
             SELECT 
+                id AS Id,
                 username AS Username,
                 bio AS Bio,
                 phone AS Phone,
@@ -25,7 +26,7 @@ public class ProfilesRepository : IProfilesRepository
                 created_at AS CreatedAt,
                 email AS Email,
                 premium AS Premium,
-                password as Password
+                password AS Password
             FROM profiles 
             WHERE id = @userId
         ";
@@ -35,7 +36,28 @@ public class ProfilesRepository : IProfilesRepository
         return profile;
     }
 
-    public async Task<LoginModel?> SelectUser(string Email)
+    public async Task<ProfileModel?> PublicGetProfileById(Guid userId)
+    {
+        var query = @"
+            SELECT 
+                id AS Id,
+                username AS Username,
+                bio AS Bio,
+                phone AS Phone,
+                logo_url AS LogoUrl,
+                created_at AS CreatedAt,
+                email AS Email,
+                premium AS Premium
+            FROM profiles 
+            WHERE id = @userId
+        ";
+
+        var profile = await _conn.QuerySingleOrDefaultAsync<ProfileModel>(query, new { userId });
+
+        return profile;
+    }
+
+    public async Task<LoginModel?> GetProfileByEmail(string Email)
     {
         var query = @"
             SELECT 
