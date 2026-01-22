@@ -23,14 +23,14 @@ public class TokenService : ITokenService
 	{
 		ValidateIssuerSigningKey = true,
 		IssuerSigningKey = new SymmetricSecurityKey(
-			Encoding.UTF8.GetBytes(config["Jwt:Key"]!)
+			Encoding.UTF8.GetBytes(config["JWT_KEY"]!)
 		),
 
 		ValidateIssuer = true,
 		ValidateAudience = true,
 
-		ValidIssuer = config["Jwt:Issuer"],
-		ValidAudience = config["Jwt:Audience"],
+		ValidIssuer = config["JWT_ISSUER"],
+		ValidAudience = config["JWT_AUDIENCE"],
 
 		ValidateLifetime = true,
 		ClockSkew = TimeSpan.Zero
@@ -38,7 +38,7 @@ public class TokenService : ITokenService
 
 	public string GenerateToken(Guid userId)
 	{
-		var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
+		var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT_KEY"]!));
 		var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
 		var claims = new[] {
@@ -47,8 +47,8 @@ public class TokenService : ITokenService
 		};
 
 		var token = new JwtSecurityToken(
-			issuer: _config["Jwt:Issuer"],
-			audience: _config["Jwt:Audience"],
+			issuer: _config["JWT_ISSUER"],
+			audience: _config["JWT_AUDIENCE"],
 			claims: claims,
 			expires: DateTime.UtcNow.AddHours(1),
 			signingCredentials: credentials

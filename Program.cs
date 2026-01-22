@@ -9,11 +9,19 @@ using CatalogoZap.Repositories.Interfaces;
 using System.Data;
 using Npgsql;
 using CatalogoZap.Infrastructure.CloudinaryService;
+using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
 
+Env.Load(Path.Combine(builder.Environment.ContentRootPath, ".env"));
+
+builder.Configuration
+    .AddEnvironmentVariables()
+    .AddJsonFile("appsettings.json", optional: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
+
 if (builder.Environment.IsDevelopment()) {
-    var connectionString = builder.Configuration.GetConnectionString("Default");
+    var connectionString = builder.Configuration["CONNECTION_STRING"];
 
     builder.Configuration.GetSection("ConnectionStrings")["Default"] = connectionString;
 }
@@ -55,7 +63,7 @@ builder.Services.AddScoped<IStoresService, StoresService>();
 builder.Services.AddScoped<IStoresRepository, StoresRepository>();
 
 builder.Services.AddScoped<IDbConnection>(sp =>
-	new NpgsqlConnection(builder.Configuration.GetConnectionString("Default"))
+	new NpgsqlConnection(builder.Configuration["CONNECTION_STRING"])
 );
 
 var app = builder.Build();

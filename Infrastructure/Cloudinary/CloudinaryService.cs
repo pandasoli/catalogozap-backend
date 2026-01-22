@@ -15,7 +15,7 @@ public class CloudinaryService : ICloudinaryService
 
     public CloudinaryService(IConfiguration config)
     {
-        var cloudinaryUrl = config["Cloudinary:ApiKey"];
+        var cloudinaryUrl = config["CLOUDINARY_KEY"];
 
         if (string.IsNullOrEmpty(cloudinaryUrl))
             throw new Exception("CLOUDINARY_URL not found");
