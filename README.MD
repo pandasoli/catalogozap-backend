@@ -1,10 +1,10 @@
 <div align="center">
 <h1>CatálogoZap</h1>
 
-![GitHub Stars](https://img.shields.io/github/stars/pandasoli/catalogozap-backend?style=social)
-![GitHub Forks](https://img.shields.io/github/forks/pandasoli/catalogozap-backend?style=social)
-![GitHub Issues](https://img.shields.io/github/issues/pandasoli/catalogozap-backend)
-![GitHub License](https://img.shields.io/github/license/pandasoli/catalogozap-backend)
+![GitHub Stars](https://img.shields.io/github/stars/Lucca2013/catalogozap-backend?style=social)
+![GitHub Forks](https://img.shields.io/github/forks/Lucca2013/catalogozap-backend?style=social)
+![GitHub Issues](https://img.shields.io/github/issues/Lucca2013/catalogozap-backend)
+![GitHub License](https://img.shields.io/github/license/Lucca2013/catalogozap-backend)
 <br>
 CatálogoZap is a simple and practical solution to create digital product catalogs integrated with WhatsApp.
 </div>
