@@ -4,7 +4,7 @@
 ![GitHub Stars](https://img.shields.io/github/stars/pandasoli/catalogozap-backend?style=social)
 ![GitHub Forks](https://img.shields.io/github/forks/pandasoli/catalogozap-backend?style=social)
 ![GitHub Issues](https://img.shields.io/github/issues/pandasoli/catalogozap-backend)
-![GitHub License](https://img.shields.io/github/license/pandasoli/catalogozap-backend)
+![GitHub License](https://img.shields.io/github/license/pandasoli/catalogozap-backend) \n
 CatálogoZap is a simple and practical solution to create digital product catalogs integrated with WhatsApp.
 </div>
 
