@@ -28,7 +28,7 @@ public class ProductsService : IProductsService
     public async Task CreateProduct(ProductDTO dto, Guid userId)
     {
         if (await _profilesService.HasReachedFreeTierLimit(userId))
-            throw new Exception("Reached free plan products limit.");
+            throw new UnauthorizedException("Reached free plan products limit.");
 
         string photoUrl = await _cloudinaryService.UploadImageAsync(dto.Photo);
 
